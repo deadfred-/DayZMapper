@@ -20,25 +20,31 @@ if ($result)
 	while ($row = mysql_fetch_array($result))
 	{
 		$pos = $row["pos"];
-		$pos = str_replace(array("[","]"), "", $pos);
-		$posArray = explode(",", $pos);
-
-		$x = $posArray[1];
-		$y = $posArray[2];
-		
-		$y = $y - 15365;
-		$y *= -1;
-		
-		$id = $row["unique_id"];
-		$result2 = mysql_query("SELECT name,humanity FROM profile WHERE unique_id=$id");
-		$name = "Unnamed";
-		$humanity = 0;
-		if ($result2)
+		if ($pos != "[]")
 		{
-			$row2 = mysql_fetch_array($result2);
-			$name = $row2["name"];
-			$humanity = $row2["humanity"];
-		}
+			$pos = str_replace(array("[","]"), "", $pos);
+			$posArray = explode(",", $pos);
+
+			$x = $posArray[1];
+			$y = $posArray[2];
+			
+			$y = $y - 15365;
+			$y *= -1;
+			if ($y > 100 and $x > 100)
+			{
+			
+			
+			
+			$id = $row["unique_id"];
+			$result2 = mysql_query("SELECT name,humanity FROM profile WHERE unique_id=$id");
+			$name = "Unnamed";
+			$humanity = 0;
+			if ($result2)
+			{
+				$row2 = mysql_fetch_array($result2);
+				$name = $row2["name"];
+				$humanity = $row2["humanity"];
+			}
 		
 ?>	<player>
 		<id><?=$row[id]?></id>
@@ -53,6 +59,8 @@ if ($result)
 		<bkills><?=$row["bandit_kills"]?></bkills>
 	</player>
 <?php
+		}
+		}
 	}
 }
 
