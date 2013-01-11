@@ -14,12 +14,12 @@ include("config.php");
 mysql_connect($host, $user, $password) or die ("Unable to connect");
 @mysql_select_db($database) or die ("Unable to select DB");
 
-$result = mysql_query("SELECT * FROM survivor WHERE last_update > DATE_SUB(now(), INTERVAL 5 MINUTE) AND is_dead=0");
+$result = mysql_query("SELECT * FROM survivor WHERE last_updated > date_sub(now(), INTERVAL 5 MINUTE) AND is_dead = 0");
 if ($result)
 {
 	while ($row = mysql_fetch_array($result))
 	{
-		$pos = $row["pos"];
+		$pos = $row["worldspace"];
 		if ($pos != "[]")
 		{
 			$pos = str_replace(array("[","]"), "", $pos);
@@ -51,7 +51,7 @@ if ($result)
 		<name><![CDATA[<?=$name?>]]></name>
 		<x><?=$x?></x>
 		<y><?=$y?></y>
-		<age><?=strtotime($row["last_update"]) - strtotime("now")?></age>
+		<age><?=strtotime($row["last_updated"]) - strtotime("now")?></age>
 		<humanity><?=$humanity?></humanity>
 		<inventory><![CDATA[<?=$row["inventory"]?>]]></inventory>
 		<model><![CDATA[<?=$row["model"]?>]]></model>
@@ -61,33 +61,6 @@ if ($result)
 <?php
 		}
 		}
-	}
-}
-
-$result = mysql_query("SELECT * FROM objects WHERE instance='$instance'");
-if ($result)
-{
-	while ($row = mysql_fetch_array($result))
-	{
-		$pos = $row[pos];
-		$pos = str_replace(array("[","]"), "", $pos);
-		$posArray = explode(",", $pos);
-
-		$x = $posArray[1];
-		$y = $posArray[2];
-		
-		$y = $y - 15365;
-		$y *= -1;
-		
-?>	<object>
-		<id><?=$row[id]?></id>
-		<otype><![CDATA[<?=$row["otype"]?>]]></otype>
-		<x><?=$x?></x>
-		<y><?=$y?></y>
-		<age><?=strtotime($row["lastupdate"]) - strtotime("now")?></age>
-		<inventory><![CDATA[<?=$row["inventory"]?>]]></inventory>
-	</object>
-<?php
 	}
 }
 
